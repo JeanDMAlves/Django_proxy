@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lista De Palavras</title>
+    </head>
+    <body>
+        <h1>Lista de Palavras Proibidas</h1>
+        <table>
+            <thead>
+                <th>Palavra Proibida</th>
+                <th>Palavra Substituta</th>
+            </thead>
+            <tbody>
+            {% for word in words %}
+                <tr>
+                    <td>{{  word.word  }}</td>
+                    <td>{{  word.substitute_word  }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'cursed_word' %}">Voltar</a>
+    </body>
+</html>

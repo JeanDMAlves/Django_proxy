@@ -1,0 +1,26 @@
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Proxy</title>
+        {% bootstrap_css %}
+    </head>
+    <body>
+        <div class="container">
+            <h1>Buscar URL com filtro</h1>
+            {% bootstrap_messages %}
+            <form action="{% url 'proxy' %}" method="post" class="form" autocomplete="off">
+                {% csrf_token %}    
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                {% endbuttons %}
+            </form>
+            <a href="{% url 'list_words' %}">Ver suas palavras proibidas</a>
+            <br>
+            <a href="{% url 'cursed_word' %}">Adicionar novas palavras proibidas</a>
+        </div>
+    {% bootstrap_javascript jquery='full' %}
+    </body>
+</html>
