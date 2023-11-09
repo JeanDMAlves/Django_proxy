@@ -10,7 +10,7 @@
         <div class="container">
             <h1>Buscar URL com filtro</h1>
             {% bootstrap_messages %}
-            <form action="{% url 'proxy' %}" method="post" class="form" autocomplete="off">
+            <form action="{% url 'redirect_proxy' %}" method="post" class="form" autocomplete="off">
                 {% csrf_token %}    
                 {% bootstrap_form form %}
                 {% buttons %}
