@@ -8,5 +8,5 @@ urlpatterns = [
     path('words/', cursed_word, name='cursed_word'),
     path('list-words/', show_cursed_words, name='list_words'),
     path('proxy/', proxy, name='proxy'),
-    path('redirect_proxy/', redirect_proxy, name="redirect_proxy")
+    path('redirect_proxy/', redirect_proxy, name="redirect_proxy"),
 ]

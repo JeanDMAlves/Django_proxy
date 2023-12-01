@@ -10,7 +10,10 @@ import requests
 from urllib.parse import urlparse, urljoin, urlunparse
 
 def index(request):
-    return render(request, 'index.html')
+    if request.user.is_authenticated:
+        return redirect('redirect_proxy')
+    else:
+        return render(request, 'index.html')
 
 def register(request):
     form = RegisterForm(request.POST or None) 
@@ -101,7 +104,7 @@ def apply_proxy_word_filter(soup: str, id_user: int, url: str) -> BeautifulSoup:
     for word in cursed_words.keys():
         palavra = soup.find(text=word)
         if palavra != None:
-            html.find(text=word).replaceWith(cursed_words[word])
+            soup.find(text=word).replaceWith(cursed_words[word])
     
     parsed_url = urlparse(url)
     base_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '', '', '', ''))
@@ -126,7 +129,6 @@ def apply_proxy_word_filter(soup: str, id_user: int, url: str) -> BeautifulSoup:
             link.i.replace_with(new_tag)    
     
     for link in soup.find_all('script', src=True): # js    
-        # Muitos bloqueados pelo CORS MISSING ALLOW ORIGIN
         asset_url = link['src']
         absolute_url = urljoin(base_url, asset_url)
         link['src'] = absolute_url
