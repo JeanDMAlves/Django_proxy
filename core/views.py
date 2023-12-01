@@ -101,10 +101,11 @@ def apply_proxy_word_filter(soup: str, id_user: int, url: str) -> BeautifulSoup:
         word.word:word.substitute_word for word in CursedWordsModel.objects.filter(id_user=id_user)
     }
     
-    for word in cursed_words.keys():
-        palavra = soup.find(text=word)
-        if palavra != None:
-            soup.find(text=word).replaceWith(cursed_words[word])
+    for word, substitute_word in cursed_words.items():
+    # Encontrar todas as ocorrências da palavra proibida
+        for element in soup.find_all(text=lambda text: text and word in text):
+            # Substituir a palavra proibida pelo texto alternativo
+            new_content = element.replace_with(str(element).replace(word, substitute_word))        
     
     parsed_url = urlparse(url)
     base_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '', '', '', ''))
