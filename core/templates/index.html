@@ -1,24 +1,54 @@
 {% load bootstrap4 %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <title>Index</title>
-        {% bootstrap_css %}
-    </head>
-    <body>
-        <div class="container">
-            <h2>Quer criar uma conta?</h2>
-            <a href="{% url 'register' %}">Venha por aqui!</a>
-            <h2>Já tem uma conta?</h2>
-            <a href="{% url 'login' %}">Vamos logar!</a>
-            <h2>Já está logado?</h2>
-            <a href="{% url 'redirect_proxy' %}">Ir para o proxy!</a>
-            <h2>Adicionar palavras proibidas?</h2>
-            <a href="{% url 'cursed_word' %}">Vamos lá!</a>
-            <h2>Quer ver suas palavras proibidas?</h2>
-            <a href="{% url 'list_words' %}">Ver!</a>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    {% bootstrap_css %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Quer criar uma conta?</h2>
+        <a class="btn btn-primary" href="{% url 'register' %}">Crie sua conta</a>
+
+        <h2>Já tem uma conta?</h2>
+        <a class="btn btn-secondary" href="{% url 'login' %}">Faça login</a>
+
+        <h2>Já está logado?</h2>
+        <a class="btn btn-success" href="{% url 'redirect_proxy' %}">Ir para o proxy</a>
+
+        <h2>Adicionar palavras proibidas?</h2>
+        <a class="btn btn-warning" href="{% url 'cursed_word' %}">Adicione palavras proibidas</a>
+
+        <h2>Quer ver suas palavras proibidas?</h2>
+        <a class="btn btn-info" href="{% url 'list_words' %}">Ver palavras proibidas</a>
+    </div>
     {% bootstrap_javascript jquery='full' %}
-    </body>
+</body>
 </html>

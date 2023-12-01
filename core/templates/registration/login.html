@@ -1,23 +1,51 @@
 {% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <title>Registrar</title>
-        {% bootstrap_css %}
-    </head>
-    <body>
-        <div class="container">
-            <h1>Logar</h1>
-            {% bootstrap_messages %}
-            <form method="post" class="form" autocomplete="off">
-                {% csrf_token %}    
-                {% bootstrap_form form %}
-                {% buttons %}
-                    <button type="submit" class="btn btn-primary">Logar</button>
-                {% endbuttons %}
-            </form>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>Logar</title>
+    {% bootstrap_css %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Logar</h1>
+        {% bootstrap_messages %}
+        <form method="post" class="form" autocomplete="off">
+            {% csrf_token %}    
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Logar</button>
+            {% endbuttons %}
+        </form>
+    </div>
     {% bootstrap_javascript jquery='full' %}
-    </body>
+</body>
 </html>
