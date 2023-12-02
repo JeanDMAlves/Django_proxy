@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.http import HttpResponse
 from django.template import Template
 from .forms import RegisterForm, CursedWordsForm, ProxyURLForm
@@ -20,16 +21,24 @@ def register(request):
     if str(request.method) == 'POST':
         if form.is_valid():
             user = User.objects.create_user(
-                form.cleaned_data["usuario"],
-                form.cleaned_data["email"],
-                form.cleaned_data["senha"]
+                username=form.cleaned_data["usuario"],
+                email=form.cleaned_data["email"],
+                password=form.cleaned_data["senha"],
+                first_name=form.cleaned_data["menor_de_idade"] # underage
             )        
+            print(dir(user))
+            print(user.first_name)
+            print(type(user.first_name))
             return redirect('login')
     else:
         context = {
             'form':form
         }
         return render(request, 'register.html', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 @login_required
 def cursed_word(request):
@@ -52,6 +61,8 @@ def cursed_word(request):
 
 @login_required
 def show_cursed_words(request):
+    print(dir(request.session))
+    print(request.session.values)
     id_user = request.user.id
     cursed_words = CursedWordsModel.objects.filter(id_user=id_user)
     context = {
@@ -79,7 +90,7 @@ def proxy(request):
         url = request.GET.get('url', '')
         request_html = requests.get(url)
         soup = BeautifulSoup(request_html.text, features="html.parser")
-        html = apply_proxy_word_filter(soup=soup, id_user=request.user.id, url=url)
+        html = apply_proxy_word_filter(soup=soup, user=request.user, url=url)
         html = change_anchors_to_proxy(soup=soup, url=url)
         return HttpResponse(str(html))
     else:
@@ -94,18 +105,20 @@ def change_anchors_to_proxy(soup, url):
         anchor['href'] = f'http://127.0.0.1:8000/proxy?url={absolute_url}'
     return soup
 
-def apply_proxy_word_filter(soup: str, id_user: int, url: str) -> BeautifulSoup:
+def apply_proxy_word_filter(soup: str, user, url: str) -> BeautifulSoup:
     # https://www.digitalocean.com/community/tutorials/getting-started-with-python-requests-get-requests
-
-    cursed_words = {
-        word.word:word.substitute_word for word in CursedWordsModel.objects.filter(id_user=id_user)
-    }
+    # https://docs.docker.com/language/python/containerize/
     
-    for word, substitute_word in cursed_words.items():
-    # Encontrar todas as ocorrências da palavra proibida
-        for element in soup.find_all(text=lambda text: text and word in text):
-            # Substituir a palavra proibida pelo texto alternativo
-            new_content = element.replace_with(str(element).replace(word, substitute_word))        
+    if (user.first_name == 'True'): # Verifica se o usuário é menor de idade para aplicar o filtro
+        cursed_words = {
+            word.word:word.substitute_word for word in CursedWordsModel.objects.filter(id_user=user.id)
+        }
+        
+        for word, substitute_word in cursed_words.items():
+        # Encontrar todas as ocorrências da palavra proibida
+            for element in soup.find_all(text=lambda text: text and word in text):
+                # Substituir a palavra proibida pelo texto alternativo
+                new_content = element.replace_with(str(element).replace(word, substitute_word))        
     
     parsed_url = urlparse(url)
     base_url = urlunparse((parsed_url.scheme, parsed_url.netloc, '', '', '', ''))
